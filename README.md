@@ -23,26 +23,32 @@ This is a **multimodal RAG** system combining retrieval (CLIP + FAISS), image-to
 - Works on completely unseen stories (e.g., a new kitten fairy tale)
 
 ### Architecture
-                      Children's Storybook
-                  (15 images + story texts)
-                               │
-                               ▼
-                  CLIP → Embeddings (Image/Text Vectors)
-                               │
-                               ▼
-                        FAISS Vector Database
-                  (Fast search: "Most similar book page?")
-                               │
-            ┌──────────────────┼──────────────────┐
-            ▼                  ▼                  ▼
-   Image Input          Text Input          Sequence Input
-       │                   │                   │
-       ▼                   ▼                   ▼
-   Retrieval (CLIP+FAISS) → Augment Prompt → BLIP (Story Gen)
-                                           → Stable Diffusion (Image Gen)
-       │                                       │
-       ▼                                       ▼
-  Generated Story                         Generated Image(s)
+Children's Storybook Dataset
+(15 images + story texts)
+|
+|
+v
+CLIP --> Embeddings (Image/Text Vectors)
+|
+|
+v
+FAISS Vector Database
+(Fast search: "Most similar book page?")
+|
++----------------+----------------+
+|                |                |
+Image Input       Text Input      Sequence Input
+|                |                |
+v                v                v
+Embed --> Retrieve (Top-k=2) --> Augment Prompt --> Generation
+|
+|
+v
+BLIP (Image-->Text) / Stable Diffusion (Text-->Image)
+|
+|
+v
+Output (Story / Illustration(s))
 
 ### Project structure
 T18_mlse_project/
